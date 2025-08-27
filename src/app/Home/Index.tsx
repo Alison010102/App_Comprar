@@ -1,29 +1,45 @@
-import { View, Image } from "react-native"
+import { View, Image, TouchableOpacity,Text } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button"
 import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/FilterStatus"
+import { Item } from "@/components/Item"
+
+const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENGING, FilterStatus.DONE]
 
 
-export  function Home(){
-  return(
-    <View style = {styles.container}>
-      <Image source={ require("@/assets/logo.png")} style= {styles.logo}/>
+export function Home() {
+  return (
+    <View style={styles.container}>
+      <Image source={require("@/assets/logo.png")} style={styles.logo} />
 
-<View style={styles.form}>
+      <View style={styles.form}>
 
-<Input placeholder="O que você precisa comprar?"/>
-<Button title="Entrar" />
+        <Input placeholder="O que você precisa comprar?" />
+        <Button title="Entrar" />
 
-</View>
+      </View>
 
-<View style={styles.content}>
-  <Filter status={FilterStatus.DONE} isActive={true}/>
-  <Filter status={FilterStatus.PENGING} isActive={false}/>
-</View>
+      <View style={styles.content}>
+        <View style={styles.header}>
+          {
+            FILTER_STATUS.map((status) => (
+              <Filter key={status} status={status} isActive={true} />
+            ))
+          }
+
+          <TouchableOpacity style={styles.clearButton}>
+            <Text>Limpar</Text>
+          </TouchableOpacity>
+        </View>
+        <Item data ={{status: FilterStatus.DONE,description:"Café"}}
+        onStatus={()=> console.log("mudar status")}
+        onRemove={()=> console.log("Remover")}
+        />
+      </View>
     </View>
-    
+
   )
 }
 
