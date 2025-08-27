@@ -1,13 +1,13 @@
-import { View, Image, TouchableOpacity,Text } from "react-native"
+import { View, Image, TouchableOpacity,Text,FlatList } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button"
+import { Item } from "@/components/Item"
 import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/FilterStatus"
-import { Item } from "@/components/Item"
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENGING, FilterStatus.DONE]
-
+const ITEMS = Array.from({length:100}).map((_,index)=> String(index))
 
 export function Home() {
   return (
@@ -33,9 +33,16 @@ export function Home() {
             <Text>Limpar</Text>
           </TouchableOpacity>
         </View>
-        <Item data ={{status: FilterStatus.DONE,description:"Café"}}
+        <FlatList
+        data={ITEMS}
+        keyExtractor={(item)=> item}
+        renderItem={({item})=>(
+          <Item
+       data ={{status: FilterStatus.DONE,description:item}}
         onStatus={()=> console.log("mudar status")}
         onRemove={()=> console.log("Remover")}
+        />
+        )}
         />
       </View>
     </View>
