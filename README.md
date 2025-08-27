@@ -6,3 +6,5 @@ novo exemplo de CRUD em full stack
 
 
 segunda parte, conhecendo os botões e componentes 
+
+finalizando a parte 3, criando itens e icones
