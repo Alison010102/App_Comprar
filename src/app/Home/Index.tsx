@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { View, Image, TouchableOpacity, Text, FlatList } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button"
@@ -6,7 +7,7 @@ import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/FilterStatus"
 
-const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENGING, FilterStatus.DONE]
+const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 const ITEMS = [
   { id: "1", status: FilterStatus.DONE, description: "1 pacote de nescau" },
   { id: "2", status: FilterStatus.DONE, description: "3 pacote de macarrao" },
@@ -15,6 +16,11 @@ const ITEMS = [
 ]
 
 export function Home() {
+  const [filter, setFilter]= useState(FilterStatus.PENDING)
+
+  function update(value:FilterStatus){
+    setFilter(value)
+  }
   return (
     <View style={styles.container}>
       <Image source={require("@/assets/logo.png")} style={styles.logo} />
@@ -30,7 +36,12 @@ export function Home() {
         <View style={styles.header}>
           {
             FILTER_STATUS.map((status) => (
-              <Filter key={status} status={status} isActive={true} />
+              <Filter
+               key={status} 
+               status={status} 
+               isActive={true} 
+               onPress={()=> update(status)}
+               />
             ))
           }
 
