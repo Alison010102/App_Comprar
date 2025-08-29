@@ -1,5 +1,5 @@
-import { useState } from "react"
-import { View, Image, TouchableOpacity, Text, FlatList } from "react-native"
+import { useState, useEffect } from "react"
+import { View, Image, TouchableOpacity, Alert, Text, FlatList } from "react-native"
 import { styles } from "./styles"
 import { Button } from "@/components/Button"
 import { Item } from "@/components/Item"
@@ -8,19 +8,27 @@ import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/FilterStatus"
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
-const ITEMS = [
-  { id: "1", status: FilterStatus.DONE, description: "1 pacote de nescau" },
-  { id: "2", status: FilterStatus.DONE, description: "3 pacote de macarrao" },
-  { id: "3", status: FilterStatus.DONE, description: "3 cebolas" },
 
-]
 
 export function Home() {
-  const [filter, setFilter]= useState(FilterStatus.PENDING)
+  const [filter, setFilter] = useState(FilterStatus.PENDING)
+  const [description, serDescription] = useState("")
+  const [items, setItems] = useState<any>([])
 
-  function update(value:FilterStatus){
-    setFilter(value)
+  function handleAdd() {
+    if (!description.trim()) {
+      return Alert.alert("Adicionar", "Informe a descrição para adicionar")
+    }
+    const newItem = {
+      id: Math.random().toString(36).substring(2),
+      description,
+      status: FilterStatus.PENDING
+    }
   }
+  useEffect(()=>{
+    console.log("useEffect")
+  },[filter,description])
+
   return (
     <View style={styles.container}>
       <Image source={require("@/assets/logo.png")} style={styles.logo} />
@@ -28,7 +36,7 @@ export function Home() {
       <View style={styles.form}>
 
         <Input placeholder="O que você precisa comprar?" />
-        <Button title="Entrar" />
+        <Button title="Adicionar" onPress={handleAdd} />
 
       </View>
 
@@ -37,11 +45,11 @@ export function Home() {
           {
             FILTER_STATUS.map((status) => (
               <Filter
-               key={status} 
-               status={status} 
-               isActive={true} 
-               onPress={()=> update(status)}
-               />
+                key={status}
+                status={status}
+                isActive={true}
+                onPress={() => update(status)}
+              />
             ))
           }
 
@@ -50,7 +58,7 @@ export function Home() {
           </TouchableOpacity>
         </View>
         <FlatList
-          data={ITEMS}
+          data={items}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <Item
