@@ -6,6 +6,7 @@ import { Item } from "@/components/Item"
 import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/FilterStatus"
+import { ItemStorage,itemStorage } from "@/storage/itemsStorage"
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
@@ -13,7 +14,7 @@ const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 export function Home() {
   const [filter, setFilter] = useState(FilterStatus.PENDING)
   const [description, serDescription] = useState("")
-  const [items, setItems] = useState<any>([])
+  const [items, setItems] = useState<ItemStorage[]>([])
 
   function handleAdd() {
     if (!description.trim()) {
@@ -25,9 +26,20 @@ export function Home() {
       status: FilterStatus.PENDING
     }
   }
+  async function getItems() {
+    try {
+      const response = await itemStorage.get()
+      setItems(response)
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Erro","Não foi possivel filtrar os itens.")
+    }
+  }
+
+
   useEffect(()=>{
-    console.log("useEffect")
-  },[filter,description])
+    itemStorage.get().then()
+  },[])
 
   return (
     <View style={styles.container}>
@@ -48,7 +60,7 @@ export function Home() {
                 key={status}
                 status={status}
                 isActive={true}
-                onPress={() => update(status)}
+                onPress={() => setFilter(status)}
               />
             ))
           }
