@@ -6,7 +6,7 @@ import { Item } from "@/components/Item"
 import { Input } from "@/components/Input"
 import { Filter } from "@/components/Filter"
 import { FilterStatus } from "@/types/FilterStatus"
-import { ItemStorage,itemStorage } from "@/storage/itemsStorage"
+import { ItemStorage, itemStorage } from "@/storage/itemsStorage"
 
 const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
@@ -16,7 +16,7 @@ export function Home() {
   const [description, setDescription] = useState("")
   const [items, setItems] = useState<ItemStorage[]>([])
 
-async function handleAdd() {
+  async function handleAdd() {
     if (!description.trim()) {
       return Alert.alert("Adicionar", "Informe a descrição para adicionar")
     }
@@ -27,22 +27,62 @@ async function handleAdd() {
     }
 
     await itemStorage.add(newItem)
-    await itemByStatus()
+    await itemsByStatus()
+
+    Alert.alert("Adicionado", `Adicionado ${description}`)
+    setFilter(FilterStatus.PENDING)
+    setDescription("")
   }
-  async function itemByStatus() {
+  async function itemsByStatus() {
     try {
       const response = await itemStorage.getByStatus(filter)
       setItems(response)
     } catch (error) {
       console.log(error)
-      Alert.alert("Erro","Não foi possivel filtrar os itens.")
+      Alert.alert("Erro", "Não foi possivel filtrar os itens.")
     }
+  }
+  async function handleRemove(id: string) {
+    try {
+      await itemStorage.remove(id)
+      await itemsByStatus()
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Remover", "Não foi possível remover.")
+    }
+  }
+  function handleClear() {
+    Alert.alert("Limpar", "Deseja remover todos?", [
+      { text: "Não", style: "cancel" },
+      { text: "sim", onPress: () => onClear() }
+    ])
+  }
+
+  async function onClear() {
+    try {
+      await itemStorage.clear()
+      setItems([])
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Erro", "Não foi possível remover todos os itens.")
+    }
+
+  }
+  async function hangleToggleItemStatus(id: string) {
+    try {
+      await itemStorage.toggleStatus(id)
+      await itemsByStatus()
+    } catch (error) {
+      console.log(error)
+      Alert.alert("Erro", "Não foi possível atualizar o status")
+    }
+
   }
 
 
-  useEffect(()=>{
-    itemByStatus()
-  },[filter])
+  useEffect(() => {
+    itemsByStatus()
+  }, [filter])
 
   return (
     <View style={styles.container}>
@@ -51,7 +91,9 @@ async function handleAdd() {
       <View style={styles.form}>
 
         <Input placeholder="O que você precisa comprar?"
-        onChangeText={setDescription} />
+          onChangeText={setDescription}
+          value={description}
+        />
         <Button title="Adicionar" onPress={handleAdd} />
 
       </View>
@@ -63,13 +105,13 @@ async function handleAdd() {
               <Filter
                 key={status}
                 status={status}
-                isActive={filter === status }
+                isActive={filter === status}
                 onPress={() => setFilter(status)}
               />
             ))
           }
 
-          <TouchableOpacity style={styles.clearButton}>
+          <TouchableOpacity style={styles.clearButton} onPress={handleClear}>
             <Text>Limpar</Text>
           </TouchableOpacity>
         </View>
@@ -79,8 +121,8 @@ async function handleAdd() {
           renderItem={({ item }) => (
             <Item
               data={item}
-              onStatus={() => console.log("mudar status")}
-              onRemove={() => console.log("Remover")}
+              onStatus={() => hangleToggleItemStatus(item.id)}
+              onRemove={() => handleRemove(item.id)}
             />
           )}
           showsVerticalScrollIndicator={false}
