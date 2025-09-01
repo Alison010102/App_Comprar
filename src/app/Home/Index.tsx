@@ -13,10 +13,10 @@ const FILTER_STATUS: FilterStatus[] = [FilterStatus.PENDING, FilterStatus.DONE]
 
 export function Home() {
   const [filter, setFilter] = useState(FilterStatus.PENDING)
-  const [description, serDescription] = useState("")
+  const [description, setDescription] = useState("")
   const [items, setItems] = useState<ItemStorage[]>([])
 
-  function handleAdd() {
+async function handleAdd() {
     if (!description.trim()) {
       return Alert.alert("Adicionar", "Informe a descrição para adicionar")
     }
@@ -25,10 +25,13 @@ export function Home() {
       description,
       status: FilterStatus.PENDING
     }
+
+    await itemStorage.add(newItem)
+    await itemByStatus()
   }
-  async function getItems() {
+  async function itemByStatus() {
     try {
-      const response = await itemStorage.get()
+      const response = await itemStorage.getByStatus(filter)
       setItems(response)
     } catch (error) {
       console.log(error)
@@ -38,8 +41,8 @@ export function Home() {
 
 
   useEffect(()=>{
-    itemStorage.get().then()
-  },[])
+    itemByStatus()
+  },[filter])
 
   return (
     <View style={styles.container}>
@@ -47,7 +50,8 @@ export function Home() {
 
       <View style={styles.form}>
 
-        <Input placeholder="O que você precisa comprar?" />
+        <Input placeholder="O que você precisa comprar?"
+        onChangeText={setDescription} />
         <Button title="Adicionar" onPress={handleAdd} />
 
       </View>
@@ -59,7 +63,7 @@ export function Home() {
               <Filter
                 key={status}
                 status={status}
-                isActive={true}
+                isActive={filter === status }
                 onPress={() => setFilter(status)}
               />
             ))
