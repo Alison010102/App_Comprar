@@ -1,10 +1,77 @@
-##🧑🏻‍💻INICIO
+# 🛒 Lista de Compras React Native
 
-Iniciando o novo app de compras, ultilizando typescript e react-native
+Aplicativo simples de lista de compras desenvolvido em React Native, com armazenamento local utilizando AsyncStorage.
 
-novo exemplo de CRUD em full stack
+---
+
+## ✨ Funcionalidades
+
+- ➕ Adicionar itens com descrição.
+- ✅ Marcar itens como pendentes ou comprados.
+- 🔍 Filtrar itens por status (Pendentes ou Comprados).
+- 🗑️ Remover itens individualmente.
+- 🧹 Limpar toda a lista de itens.
+- 💾 Armazenamento persistente usando AsyncStorage.
+
+---
+
+## 🛠️ Tecnologias
+
+- ⚛️ React Native
+- 📝 TypeScript
+- 📦 AsyncStorage (@react-native-async-storage/async-storage)
+- 🎨 Lucide-react-native (ícones)
+- 🎣 React Hooks (useState, useEffect)
+
+---
+
+## 📁 Estrutura do Projeto
+
+- 📦 **/src/components** — Componentes reutilizáveis (Button, Input, Item, Filter, StatusIcon)
+- 💾 **/src/storage** — Lógica de armazenamento local (itemStorage)
+- 📚 **/src/types** — Definição de tipos e enums (FilterStatus)
+- 🖥️ **/src/screens/Home.tsx** — Tela principal com a lista e funcionalidades
+- 🎨 **/src/styles** — Estilos aplicados aos componentes
+
+---
+
+## 🚀 Como usar
+
+### 🔧 Requisitos
+
+- Node.js instalado
+- React Native CLI ou Expo CLI
+- Ambiente configurado para React Native (Android/iOS)
+
+### 📥 Instalação
+
+1. Clone o repositório:
+git clone https://github.com/seu-usuario/seu-repositorio.git
+cd seu-repositorio
+Instale as dependências:
+
+2.Copiar código: 
+
+npm install
+# ou
+yarn install
+
+3. Execute o app:
+npx react-native run-android
+# ou
+npx react-native run-ios
+
+🎯 Uso:
 
 
-segunda parte, conhecendo os botões e componentes 
+📝 Digite a descrição do item na caixa de texto.
 
-finalizando a parte 3, criando itens e icones
+➕ Toque em Adicionar para incluir o item na lista.
+
+🔄 Use os filtros no topo para visualizar apenas itens Pendentes ou Comprados.
+
+✅ Toque no ícone ao lado do item para alternar seu status.
+
+🗑️ Toque no ícone de lixeira para remover um item.
+
+🧹 Use o botão Limpar para remover todos os itens da lista.
