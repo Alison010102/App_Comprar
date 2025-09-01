@@ -46,9 +46,8 @@ Aplicativo simples de lista de compras desenvolvido em React Native, com armazen
 ### 📥 Instalação
 
 1. Clone o repositório:
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
-Instale as dependências:
+git clone https://github.com/Alison010102/App_Comprar
+cd App_Comprar
 
 2.Copiar código: 
 
