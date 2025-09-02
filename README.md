@@ -1,6 +1,6 @@
 # 🛒 Lista de Compras React Native
 
-Aplicativo simples de lista de compras desenvolvido em React Native, com armazenamento local utilizando AsyncStorage.
+Aplicativo simples de lista de compras desenvolvido em React Native, com armazenamento local utilizando AsyncStorage
 
 ---
 
